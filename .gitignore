@@ -161,3 +161,4 @@ cython_debug/
 
 #custom ignores
 /Content/Logs/*
+.idea/workspace.xml
