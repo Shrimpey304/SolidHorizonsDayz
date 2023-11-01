@@ -10,7 +10,7 @@ class TkinterHandler:
     def __init__(self):
         log_time = dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')  # Time to be set as file name
         current_dir = os.path.dirname(__file__)
-        log_file_path = os.path.join(current_dir, 'Content', 'logs', f'Log_{log_time}.txt')
+        log_file_path = os.path.join(current_dir, 'Content', 'Logs', f'Log_{log_time}.txt')
         log.basicConfig(
             filename=log_file_path,
             level=log.DEBUG,
@@ -19,11 +19,23 @@ class TkinterHandler:
         )
 
     def mainScreen(self):
-        self.root = tk.Tk()
-        self.root.geometry('1280x720')
-        self.root.title('Dayz (Console) Manager')
-        self.root.mainloop()
-        a = input()
+        self.Root = tk.Tk()
+        self.Root.geometry('1280x720')
+        self.Root.title('Dayz (Console) Manager')
+        labelTitle = tk.Label(self.Root, text='Dayz (Console) Manager For Nitrado Hosted Servers', height=2)
+        labelTitle.pack()
+        self.Root.mainloop()
 
-    def startProgram(self):
-        self.mainScreen()
+    def apiErrorStartupScreen(self):
+        ErrorWindow = tk.Tk()
+        ErrorWindow.geometry('900x480')
+        ErrorWindow.title('Dayz (Console) Manager')
+        labelTitle = tk.Label(ErrorWindow, text='Nitrado is currently unavailable:', height=2)
+        labelTitle.pack()
+        ErrorWindow.mainloop()
+
+    def startProgram(self, a):
+        if a == True:
+            self.mainScreen()
+        else:
+            self.apiErrorStartupScreen()
