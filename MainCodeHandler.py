@@ -21,12 +21,15 @@ class Main:
         )
 
     def uponStartup(self):
-        if instApi.apiHealthCheck() == True:
-            instTkint.startProgram(True)
-        elif instApi.apiHealthCheck() == 1:
-            instTkint.startProgram(False)
-        elif instApi.apiHealthCheck() == 2:
-            instTkint.startProgram(False)
+        try:
+            if instApi.apiHealthCheck() == True:
+                instTkint.startProgram(True)
+            elif instApi.apiHealthCheck() != "failed":
+                instTkint.startProgram(False)
+        except Exception as e:
+            log.info(e)
+            print(e)
+
 
 
 StartProgram = Main()

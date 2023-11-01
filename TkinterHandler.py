@@ -34,6 +34,11 @@ class TkinterHandler:
         labelTitle.pack()
         ErrorWindow.mainloop()
 
+    def openingBrowserToUrl(self):
+        OpenedBrowser = tk.Tk()
+        labelTitle = tk.Label(OpenedBrowser, text='Opening webbrowser,Please create a token and insert it here', height=2)
+        labelTitle.pack()
+
     def startProgram(self, a):
         if a == True:
             self.mainScreen()
