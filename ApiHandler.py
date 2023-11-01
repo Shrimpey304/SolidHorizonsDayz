@@ -22,8 +22,6 @@ class ApiHandler:
             filemode='a'
         )
 
-
-
     def apiHealthCheck(self):    #checks if the nitrado services are working
         ApiHealthCheckUrl = "https://api.nitrado.net/ping"
         response = rq.get(ApiHealthCheckUrl)
@@ -62,7 +60,3 @@ class ApiHandler:
             return decodedResponse['data']
         else:
             return "failed"
-        
-        
-peeperpooper = ApiHandler()
-print(peeperpooper.apiFetchOwnerInfo())
