@@ -1,6 +1,7 @@
 import requests as rq
 import logging as log
 import datetime as dt
+import TokenHandler as TKH
 import time
 import os
 import json
@@ -9,12 +10,12 @@ import json
 
 class ApiHandler:
 
-    token = "ab"
+    token = ""
 
     def setToken(self, Token):
         token = Token
-        print(token)
-        return token
+        instTKH.tokenEncrypt(token)
+
 
     
     def __init__(self):
@@ -76,10 +77,6 @@ class ApiHandler:
             return decodedResponse['data']
         else:
             return "failed"
-        
-    #def testfunction(self)
-        #read json 
-        #if encrypted equals true then
-        #ask for password
-        #else 
-        #check token validity
+
+
+instTKH = TKH.TokenHandler()

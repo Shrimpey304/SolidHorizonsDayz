@@ -27,6 +27,8 @@ class Main:
                 instTkint.startProgram(True)
             elif instApi.apiHealthCheck() != "failed":
                 instTkint.startProgram(False)
+            else:
+                instTkint.startProgram(False)
         except Exception as e:
             log.info(e)
             print(e)

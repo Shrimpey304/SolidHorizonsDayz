@@ -43,9 +43,14 @@ class TkinterHandler:
 
 
     def openingBrowserToUrl(self):
-        OpenedBrowser = tk.Tk()
-        labelTitle = tk.Label(OpenedBrowser, text='Opening webbrowser,Please create a token and insert it here\n'
-                                                  'this window will only open if you have not yet entered a key', height=2)
+
+        def get_input_and_set_token():
+            get_input = entry.get()
+            instApi.setToken(get_input)
+
+        OpenedBrowser = tk.Toplevel(self.Root)  # Use Toplevel instead of tk.Tk()
+        labelTitle = tk.Label(OpenedBrowser, text='Opening webbrowser, Please create a token and insert it here\n'
+                                                  'This window will only open if you have not yet entered a key', height=2)
         labelTitle.pack()
 
         label = tk.Label(OpenedBrowser, text="Enter text:")
@@ -54,10 +59,8 @@ class TkinterHandler:
         entry = tk.Entry(OpenedBrowser)
         entry.pack()
 
-        get_input = entry.get()
-        button = tk.Button(OpenedBrowser, text="Get Input", command=instApi.setToken(get_input))
+        button = tk.Button(OpenedBrowser, text="Get Input", command=get_input_and_set_token)
         button.pack()
-
 
 
     def startProgram(self, a):
