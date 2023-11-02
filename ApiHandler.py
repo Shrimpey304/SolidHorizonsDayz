@@ -8,8 +8,14 @@ import json
 # import tkinter as tk
 
 class ApiHandler:
-    
-    token  = "Insert Token Here"
+
+    token = "ab"
+
+    def setToken(self, Token):
+        token = Token
+        print(token)
+        return token
+
     
     def __init__(self):
         log_time = dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')  # Time to be set as file name

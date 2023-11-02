@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0f372b78-056d-4f4b-96de-2b3ed8ff5315" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MainCodeHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainCodeHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ApiHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/ApiHandler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TkinterHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/TkinterHandler.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -14,6 +13,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="2XaATyQnS4eY2Arhn4MllKe6bEF" />
   <component name="ProjectViewState">
