@@ -163,3 +163,4 @@ cython_debug/
 Content/Logs/*
 Content/Credentials/Credentials.json
 /.idea/*
+.idea/workspace.xml
