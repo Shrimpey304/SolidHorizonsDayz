@@ -20,7 +20,7 @@ class ApiHandler:
     def __init__(self):
         log_time = dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')  # Time to be set as file name
         current_dir = os.path.dirname(__file__)  # gets path to the location of this file
-        log_file_path = os.path.join(current_dir, 'Content', 'logs', f'Log_{log_time}.txt')  # creates the full log path
+        log_file_path = os.path.join(current_dir, 'Content', 'Logs', f'Log_{log_time}.txt')  # creates the full log path
         log.basicConfig(    # configures the log structure
             filename=log_file_path,
             level=log.DEBUG,
@@ -66,3 +66,20 @@ class ApiHandler:
             return decodedResponse['data']
         else:
             return "failed"
+        
+    def apiFetchAllOwnedServices(self):
+        apiFetchOwnedServicesUrl = "https://api.nitrado.net/services"
+        apiTokenHeaders = {'Authorization': self.token}
+        response = rq.get(apiFetchOwnedServicesUrl, headers=apiTokenHeaders)
+        decodedResponse = response.json()
+        if decodedResponse['status'] == "success":
+            return decodedResponse['data']
+        else:
+            return "failed"
+        
+    #def testfunction(self)
+        #read json 
+        #if encrypted equals true then
+        #ask for password
+        #else 
+        #check token validity
