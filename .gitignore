@@ -162,4 +162,4 @@ cython_debug/
 #custom ignores
 Content/Logs/*
 Content/Credentials/Credentials.json
-.idea/workspace.xml
+/.idea/*
