@@ -2,6 +2,6 @@ K = None
 
 class Utils():
     @staticmethod
-    def fetchKeyOnetime(k):
+    def fetchDecryptedToken(k):
         global K
         K = k

@@ -64,7 +64,7 @@ class TkinterHandler:
 
         OpenedBrowser.mainloop()
 
-    def showKey(self):
+    def showKey(self, key):
         ShowKey = tk.Toplevel(self.Root)
         ShowKey.geometry('400x280')
         LabelTitle = tk.Label(ShowKey, text='This is your login key, SAVE THIS CAREFULLY:', height=2)
