@@ -3,6 +3,7 @@ import datetime as dt
 import os
 import tkinter as tk
 import ApiHandler as AH
+import json
 # from tkinter import scrolledtext, simpledialog
 
 
@@ -26,7 +27,9 @@ class TkinterHandler:
         self.Root.title('Dayz (Console) Manager')
         labelTitle = tk.Label(self.Root, text='Dayz (Console) Manager For Nitrado Hosted Servers', height=2)
         labelTitle.pack()
-        if AH.ApiHandler.token != "" and AH.ApiHandler.token is not None:
+        with open('Content/Credentials/Credentials.json') as json_file:
+            CredJSON = json.load(json_file)
+        if CredJSON['token'] is None or CredJSON['token'] == "":
             self.openingBrowserToUrl()
         else:
             pass
