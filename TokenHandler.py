@@ -36,4 +36,4 @@ class TokenHandler():
         jsonFile.write(credentialObj)
     
 instance = TokenHandler()
-print(instance.tokenDecrypt(b'zVdAhjqPJEWqLP1BrsKJXKhpMJZ1G7bE8IYo73SqhBw='))
+# print(instance.tokenDecrypt(b'zVdAhjqPJEWqLP1BrsKJXKhpMJZ1G7bE8IYo73SqhBw='))

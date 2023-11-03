@@ -2,9 +2,9 @@ import requests as rq
 import logging as log
 import datetime as dt
 import TokenHandler as TKH
-import time
+# import time
 import os
-import json
+# import json
 # import xmltodict
 # import tkinter as tk
 
@@ -14,8 +14,7 @@ class ApiHandler:
 
     def setToken(self, Token):
         token = Token
-        instTKH.tokenEncrypt(token)
-
+        return token
 
     
     def __init__(self):

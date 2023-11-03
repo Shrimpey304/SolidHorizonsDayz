@@ -26,7 +26,7 @@ class TkinterHandler:
         self.Root.title('Dayz (Console) Manager')
         labelTitle = tk.Label(self.Root, text='Dayz (Console) Manager For Nitrado Hosted Servers', height=2)
         labelTitle.pack()
-        if AH.ApiHandler.token != "" and AH.ApiHandler.token != None:
+        if AH.ApiHandler.token != "" and AH.ApiHandler.token is not None:
             self.openingBrowserToUrl()
         else:
             pass
@@ -61,6 +61,7 @@ class TkinterHandler:
 
         button = tk.Button(OpenedBrowser, text="Get Input", command=get_input_and_set_token)
         button.pack()
+        OpenedBrowser.mainloop()
 
 
     def startProgram(self, a):
