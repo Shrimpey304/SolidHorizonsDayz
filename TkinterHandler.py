@@ -3,6 +3,8 @@ import datetime as dt
 import os
 import tkinter as tk
 import ApiHandler as AH
+import TokenHandler as TKH
+import Utils
 import json
 # from tkinter import scrolledtext, simpledialog
 
@@ -27,12 +29,6 @@ class TkinterHandler:
         self.Root.title('Dayz (Console) Manager')
         labelTitle = tk.Label(self.Root, text='Dayz (Console) Manager For Nitrado Hosted Servers', height=2)
         labelTitle.pack()
-        with open('Content/Credentials/Credentials.json') as json_file:
-            CredJSON = json.load(json_file)
-        if CredJSON['token'] is None or CredJSON['token'] == "":
-            self.openingBrowserToUrl()
-        else:
-            pass
         self.Root.mainloop()
 
 
@@ -49,9 +45,10 @@ class TkinterHandler:
 
         def get_input_and_set_token():
             get_input = entry.get()
-            instApi.setToken(get_input)
+            instTKH.setToken(get_input)
 
         OpenedBrowser = tk.Toplevel(self.Root)  # Use Toplevel instead of tk.Tk()
+        OpenedBrowser.geometry('400x280')
         labelTitle = tk.Label(OpenedBrowser, text='Opening webbrowser, Please create a token and insert it here\n'
                                                   'This window will only open if you have not yet entered a key', height=2)
         labelTitle.pack()
@@ -64,8 +61,16 @@ class TkinterHandler:
 
         button = tk.Button(OpenedBrowser, text="Get Input", command=get_input_and_set_token)
         button.pack()
+
         OpenedBrowser.mainloop()
 
+    def showKey(self):
+        ShowKey = tk.Toplevel(self.Root)
+        ShowKey.geometry('400x280')
+        LabelTitle = tk.Label(ShowKey, text='This is your login key, SAVE THIS CAREFULLY:', height=2)
+        LabelTitle.pack()
+        LabelKey = tk.Label(ShowKey, text=f'{Utils.K}')
+        LabelKey.pack()
 
     def startProgram(self, a):
         if a == True:
@@ -73,5 +78,5 @@ class TkinterHandler:
         else:
             self.apiErrorStartupScreen()
 
-
 instApi = AH.ApiHandler()
+instTKH = TKH.TokenHandler()

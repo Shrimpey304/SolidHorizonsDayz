@@ -6,16 +6,8 @@ import TokenHandler as TKH
 import os
 # import json
 # import xmltodict
-# import tkinter as tk
 
 class ApiHandler:
-
-    token = ""
-
-    def setToken(self, Token):
-        token = Token
-        return token
-
     
     def __init__(self):
         log_time = dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')  # Time to be set as file name
@@ -49,7 +41,7 @@ class ApiHandler:
     
     def apiCheckTokenValidity(self):
         apiTokenValidatorUrl = "https://oauth.nitrado.net/token"
-        apiTokenHeaders = {'Authorization': self.token}
+        apiTokenHeaders = {'Authorization': instTKH.token}
         response = rq.get(apiTokenValidatorUrl, headers=apiTokenHeaders)
         decodedResponse = response.json()
         if decodedResponse['status'] == "success":
@@ -59,7 +51,7 @@ class ApiHandler:
         
     def apiFetchOwnerInfo(self):
         apiFetchOwnerInfoUrl = "https://api.nitrado.net/user"
-        apiTokenHeaders = {'Authorization': self.token}
+        apiTokenHeaders = {'Authorization': instTKH.token}
         response = rq.get(apiFetchOwnerInfoUrl, headers=apiTokenHeaders)
         decodedResponse = response.json()
         if decodedResponse['status'] == "success":
@@ -69,7 +61,7 @@ class ApiHandler:
         
     def apiFetchAllOwnedServices(self):
         apiFetchOwnedServicesUrl = "https://api.nitrado.net/services"
-        apiTokenHeaders = {'Authorization': self.token}
+        apiTokenHeaders = {'Authorization': instTKH.token}
         response = rq.get(apiFetchOwnedServicesUrl, headers=apiTokenHeaders)
         decodedResponse = response.json()
         if decodedResponse['status'] == "success":

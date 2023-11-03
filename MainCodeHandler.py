@@ -4,7 +4,7 @@ import os
 import ApiHandler as AH
 import TkinterHandler as TH
 import webbrowser as wb
-# import json as jsn
+import json
 # import xmltodict
 # import tkinter as tk
 
@@ -24,7 +24,12 @@ class Main:
     def uponStartup(self):
         try:
             if instApi.apiHealthCheck() == True:
-                instTkint.startProgram(True)
+                with open('Content/Credentials/Credentials.json') as json_file:
+                    CredJSON = json.load(json_file)
+                if CredJSON['token'] is None or CredJSON['token'] == "":
+                    instTkint.openingBrowserToUrl()
+                else:
+                    instTkint.mainScreen()
             elif instApi.apiHealthCheck() != "failed":
                 instTkint.startProgram(False)
             else:

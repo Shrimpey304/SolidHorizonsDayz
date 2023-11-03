@@ -1,9 +1,18 @@
 from cryptography.fernet import Fernet
 import json
 import os
+import Utils
 
 class TokenHandler():
-    
+
+    token = ""
+
+    def setToken(self, Token):
+        token = Token
+        print(token)
+        self.tokenEncrypt(token)
+
+
     def tokenFetch(self):
         current_dir = os.path.dirname(__file__)
         log_file_path = os.path.join(current_dir, 'Content', 'Credentials', 'Credentials.json')
@@ -14,6 +23,8 @@ class TokenHandler():
         key = Fernet.generate_key()
         fernet = Fernet(key)
         encrypted_token = fernet.encrypt(token.encode())
+        print(encrypted_token, "\n", key)
+        Utils.Utils.fetchKeyOnetime(key)
         return encrypted_token, key
         
     def tokenDecrypt(self, key):
