@@ -1,3 +1,4 @@
+
 import logging as log
 import datetime as dt
 import os
@@ -47,7 +48,7 @@ class TkinterHandler:
             get_input = entry.get()
             instTKH.setToken(get_input)
 
-        OpenedBrowser = tk.Toplevel(self.Root)  # Use Toplevel instead of tk.Tk()
+        OpenedBrowser = tk.Tk()  # Use Toplevel instead of tk.Tk()
         OpenedBrowser.geometry('400x280')
         labelTitle = tk.Label(OpenedBrowser, text='Opening webbrowser, Please create a token and insert it here\n'
                                                   'This window will only open if you have not yet entered a key', height=2)
@@ -80,3 +81,4 @@ class TkinterHandler:
 
 instApi = AH.ApiHandler()
 instTKH = TKH.TokenHandler()
+
