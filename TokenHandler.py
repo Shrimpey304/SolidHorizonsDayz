@@ -18,6 +18,7 @@ class TokenHandler():
         fernet = Fernet(key)
         encrypted_token = fernet.encrypt(token.encode())
         TokenHandler.tokenWrite(self, encrypted_token, True)
+        Utils.Utils.fetchKey(key.decode())
         return key
         
     def tokenDecrypt(self, key):
@@ -33,7 +34,7 @@ class TokenHandler():
     def tokenWrite(self, token, encryption):
         credentialObj = {
                 "encrypted" : encryption,
-                "token" : str(token).strip("b'").strip("'")
+                "token" : token.decode()
         }
         current_dir = os.path.dirname(__file__)
         log_file_path = os.path.join(current_dir, 'Content', 'Credentials', 'Credentials.json')
@@ -42,8 +43,8 @@ class TokenHandler():
         
         
 instance = TokenHandler()
-key = instance.tokenEncrypt('randomtokenidk')
-print(key)
-print(instance.tokenDecrypt(key))
-print(Utils.K)
+# key = instance.tokenEncrypt('randomtokenidk')
+# print(key)
+# print(instance.tokenDecrypt(key))
+# print(Utils.K)
 # print(instance.tokenDecrypt(b'zVdAhjqPJEWqLP1BrsKJXKhpMJZ1G7bE8IYo73SqhBw='))

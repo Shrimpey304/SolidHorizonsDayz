@@ -3,7 +3,6 @@ import datetime as dt
 import os
 import ApiHandler as AH
 import TkinterHandler as TH
-import webbrowser as wb
 import json
 # import xmltodict
 # import tkinter as tk
@@ -24,23 +23,28 @@ class Main:
     def uponStartup(self):
         try:
             if instApi.apiHealthCheck() == True:
+
                 with open('Content/Credentials/Credentials.json') as json_file:
                     CredJSON = json.load(json_file)
+
                 if CredJSON['token'] is None or CredJSON['token'] == "":
                     instTkint.openingBrowserToUrl()
                 else:
-                    instTkint.mainScreen()
+
+                    if instApi.apiCheckTokenValidity() == True:
+                        instTkint.mainScreen()
+                    else:
+                        instTkint.openingBrowserToUrl()
+
             elif instApi.apiHealthCheck() != "failed":
                 instTkint.startProgram(False)
             else:
                 instTkint.startProgram(False)
+
         except Exception as e:
             log.info(e)
             print(e)
-            
-    def browserOpenNitradoTokenPage(self):
-        url = "https://server.nitrado.net/eng/developer/tokens"
-        wb.open_new(url)
+
 
 
 

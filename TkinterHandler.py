@@ -1,4 +1,3 @@
-
 import logging as log
 import datetime as dt
 import os
@@ -6,7 +5,8 @@ import tkinter as tk
 import ApiHandler as AH
 import TokenHandler as TKH
 import Utils
-import json
+import pyperclip
+import webbrowser as wb
 # from tkinter import scrolledtext, simpledialog
 
 
@@ -44,40 +44,79 @@ class TkinterHandler:
 
     def openingBrowserToUrl(self):
 
+        Used = False
+
+        def browserOpenNitradoTokenPage():
+            url = "https://server.nitrado.net/eng/developer/tokens"
+            wb.open_new(url)
+
         def get_input_and_set_token():
             get_input = entry.get()
-            instTKH.setToken(get_input)
+            global Used
+            Used = True
+            self.OpenedBrowser.destroy()
+            instTKH.tokenEncrypt(get_input)
+            self.showKey()
 
-        OpenedBrowser = tk.Tk()  # Use Toplevel instead of tk.Tk()
-        OpenedBrowser.geometry('400x280')
-        labelTitle = tk.Label(OpenedBrowser, text='Opening webbrowser, Please create a token and insert it here\n'
-                                                  'This window will only open if you have not yet entered a key', height=2)
-        labelTitle.pack()
+        if Used == False:
+            self.OpenedBrowser = tk.Tk()  # Use Toplevel instead of tk.Tk()
+            self.OpenedBrowser.geometry('400x280')
+            labelTitle = tk.Label(self.OpenedBrowser, text='Opening webbrowser, Please create a token and insert it here\n'
+                                                      'This window will only open if you have not yet entered a key', height=2)
+            labelTitle.pack()
+            label = tk.Label(self.OpenedBrowser, text="Enter text:", width=6)
+            label.pack()
+            entry = tk.Entry(self.OpenedBrowser)
+            entry.pack()
+            button = tk.Button(self.OpenedBrowser, text="Get Input", command=get_input_and_set_token)
+            button.pack()
+            OpenBrowserButton = tk.Button(self.OpenedBrowser, text="Open the key page", command=browserOpenNitradoTokenPage)
+            OpenBrowserButton.pack()
+            self.OpenedBrowser.mainloop()
+        else:
+            pass
 
-        label = tk.Label(OpenedBrowser, text="Enter text:")
-        label.pack()
+        self.showKey()
 
-        entry = tk.Entry(OpenedBrowser)
-        entry.pack()
+    def showKey(self):
 
-        button = tk.Button(OpenedBrowser, text="Get Input", command=get_input_and_set_token)
-        button.pack()
+        def copyKey():
+            pyperclip.copy(Utils.K)
 
-        OpenedBrowser.mainloop()
+        def toMainScreen():
+            ShowKey.destroy()
+            self.mainScreen()
 
-    def showKey(self, key):
-        ShowKey = tk.Toplevel(self.Root)
+        ShowKey = tk.Tk()
         ShowKey.geometry('400x280')
-        LabelTitle = tk.Label(ShowKey, text='This is your login key, SAVE THIS CAREFULLY:', height=2)
-        LabelTitle.pack()
-        LabelKey = tk.Label(ShowKey, text=f'{Utils.K}')
-        LabelKey.pack()
+
+        if instApi.apiCheckTokenValidity() == True:
+            LabelTitle = tk.Label(ShowKey, text='This is your login key, SAVE THIS CAREFULLY:', height=2)
+            LabelTitle.pack()
+            LabelKey = tk.Label(ShowKey, text=f'{Utils.K}')
+            LabelKey.pack()
+
+            CopyKeyButton = tk.Button(ShowKey, text="Copy key to clipboard", command=copyKey)
+            CopyKeyButton.pack()
+            ToMainButton = tk.Button(ShowKey, text="Head to Mainscreen", command=toMainScreen)
+            ToMainButton.pack()
+        else:
+            def retToShowBrowser():
+                ShowKey.destroy()
+                self.openingBrowserToUrl()
+
+            LabelTitle = tk.Label(ShowKey, text='The Token you have entered is not a valid token,'
+                                                ' please try again with a freshly generated token')
+            LabelTitle.pack()
+            TryAgainButton = tk.Button(ShowKey, text="Try again", command=retToShowBrowser)
+            TryAgainButton.pack()
 
     def startProgram(self, a):
         if a == True:
             self.mainScreen()
         else:
             self.apiErrorStartupScreen()
+
 
 instApi = AH.ApiHandler()
 instTKH = TKH.TokenHandler()

@@ -4,6 +4,7 @@ import datetime as dt
 import TokenHandler as TKH
 # import time
 import os
+import Utils
 # import json
 # import xmltodict
 
@@ -41,9 +42,10 @@ class ApiHandler:
     
     def apiCheckTokenValidity(self):
         apiTokenValidatorUrl = "https://oauth.nitrado.net/token"
-        apiTokenHeaders = {'Authorization': instTKH.token}
+        apiTokenHeaders = {'Authorization': Utils.T}
         response = rq.get(apiTokenValidatorUrl, headers=apiTokenHeaders)
         decodedResponse = response.json()
+        print(Utils.T, decodedResponse)
         if decodedResponse['status'] == "success":
             return True
         else:
@@ -51,7 +53,7 @@ class ApiHandler:
         
     def apiFetchOwnerInfo(self):
         apiFetchOwnerInfoUrl = "https://api.nitrado.net/user"
-        apiTokenHeaders = {'Authorization': instTKH.token}
+        apiTokenHeaders = {'Authorization': Utils.T}
         response = rq.get(apiFetchOwnerInfoUrl, headers=apiTokenHeaders)
         decodedResponse = response.json()
         if decodedResponse['status'] == "success":
@@ -61,7 +63,7 @@ class ApiHandler:
         
     def apiFetchAllOwnedServices(self):
         apiFetchOwnedServicesUrl = "https://api.nitrado.net/services"
-        apiTokenHeaders = {'Authorization': instTKH.token}
+        apiTokenHeaders = {'Authorization': Utils.T}
         response = rq.get(apiFetchOwnedServicesUrl, headers=apiTokenHeaders)
         decodedResponse = response.json()
         if decodedResponse['status'] == "success":
