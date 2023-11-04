@@ -29,7 +29,7 @@ class TkinterHandler:
         self.Root.geometry('1280x720')
         self.Root.title('Dayz (Console) Manager')
         labelTitle = tk.Label(self.Root, text='Dayz (Console) Manager For Nitrado Hosted Servers', height=2)
-        labelTitle.pack()
+        labelTitle.pack(pady=5)
         self.Root.mainloop()
 
 
@@ -38,7 +38,7 @@ class TkinterHandler:
         ErrorWindow.geometry('900x480')
         ErrorWindow.title('Dayz (Console) Manager')
         labelTitle = tk.Label(ErrorWindow, text='Nitrado is currently unavailable:', height=2)
-        labelTitle.pack()
+        labelTitle.pack(pady=5)
         ErrorWindow.mainloop()
 
 
@@ -65,13 +65,13 @@ class TkinterHandler:
                                                       'This window will only open if you have not yet entered a key', height=2)
             labelTitle.pack()
             label = tk.Label(self.OpenedBrowser, text="Enter text:", width=6)
-            label.pack()
+            label.pack(pady=5)
             entry = tk.Entry(self.OpenedBrowser)
-            entry.pack()
+            entry.pack(pady=5)
             button = tk.Button(self.OpenedBrowser, text="Get Input", command=get_input_and_set_token)
-            button.pack()
+            button.pack(pady=5)
             OpenBrowserButton = tk.Button(self.OpenedBrowser, text="Open the key page", command=browserOpenNitradoTokenPage)
-            OpenBrowserButton.pack()
+            OpenBrowserButton.pack(pady=5)
             self.OpenedBrowser.mainloop()
         else:
             pass
@@ -92,14 +92,14 @@ class TkinterHandler:
 
         if instApi.apiCheckTokenValidity() == True:
             LabelTitle = tk.Label(ShowKey, text='This is your login key, SAVE THIS CAREFULLY:', height=2)
-            LabelTitle.pack()
+            LabelTitle.pack(pady=5)
             LabelKey = tk.Label(ShowKey, text=f'{Utils.K}')
-            LabelKey.pack()
+            LabelKey.pack(pady=5)
 
             CopyKeyButton = tk.Button(ShowKey, text="Copy key to clipboard", command=copyKey)
-            CopyKeyButton.pack()
+            CopyKeyButton.pack(pady=5)
             ToMainButton = tk.Button(ShowKey, text="Head to Mainscreen", command=toMainScreen)
-            ToMainButton.pack()
+            ToMainButton.pack(pady=5)
         else:
             def retToShowBrowser():
                 ShowKey.destroy()
@@ -107,9 +107,9 @@ class TkinterHandler:
 
             LabelTitle = tk.Label(ShowKey, text='The Token you have entered is not a valid token,'
                                                 ' please try again with a freshly generated token')
-            LabelTitle.pack()
+            LabelTitle.pack(pady=5)
             TryAgainButton = tk.Button(ShowKey, text="Try again", command=retToShowBrowser)
-            TryAgainButton.pack()
+            TryAgainButton.pack(pady=5)
 
     def startProgram(self, a):
         if a == True:
