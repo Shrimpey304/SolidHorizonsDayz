@@ -17,7 +17,7 @@ class TokenHandler():
         key = Fernet.generate_key()
         fernet = Fernet(key)
         encrypted_token = fernet.encrypt(token.encode())
-        TokenHandler.tokenWrite(TokenHandler, encrypted_token, True)
+        TokenHandler.tokenWrite(self, encrypted_token, True)
         return key
         
     def tokenDecrypt(self, key):
