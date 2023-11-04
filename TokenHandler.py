@@ -13,12 +13,14 @@ class TokenHandler():
         jsonString = open(log_file_path, 'r').read()
         return(json.loads(jsonString)['token'], json.loads(jsonString)['encrypted'])
         
+    #create a key and encrypts the token with the key, it will save both the key and the token into utils
     def tokenEncrypt(self, token):
         key = Fernet.generate_key()
         fernet = Fernet(key)
         encrypted_token = fernet.encrypt(token.encode())
         TokenHandler.tokenWrite(self, encrypted_token, True)
         Utils.Utils.fetchKey(key.decode())
+        Utils.Utils.fetchDecryptedToken(token)
         return key
         
     def tokenDecrypt(self, key):
