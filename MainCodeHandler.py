@@ -30,11 +30,7 @@ class Main:
                 if CredJSON['token'] is None or CredJSON['token'] == "":
                     instTkint.openingBrowserToUrl()
                 else:
-
-                    if instApi.apiCheckTokenValidity() == True:
-                        instTkint.mainScreen()
-                    else:
-                        instTkint.openingBrowserToUrl()
+                    instTkint.loginScreen()
 
             elif instApi.apiHealthCheck() != "failed":
                 instTkint.startProgram(False)

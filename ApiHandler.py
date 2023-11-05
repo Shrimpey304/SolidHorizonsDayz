@@ -5,7 +5,7 @@ import TokenHandler as TKH
 # import time
 import os
 import Utils
-# import json
+import json
 # import xmltodict
 
 class ApiHandler:
@@ -49,6 +49,21 @@ class ApiHandler:
             return True
         else:
             return False
+
+    def apiCheckTokenOnLogin(self, key):
+        try:
+            apiTokenValidatorUrl = "https://oauth.nitrado.net/token"
+            instTKH.tokenDecrypt(key)
+            apiTokenHeaders = {'Authorization': Utils.T}
+            response = rq.get(apiTokenValidatorUrl, headers=apiTokenHeaders)
+            decodedResponse = response.json()
+            if decodedResponse['status'] == "success":
+                return True
+            else:
+                return False
+        except ValueError as e:
+            log.info(e)
+
         
     def apiFetchOwnerInfo(self):
         apiFetchOwnerInfoUrl = "https://api.nitrado.net/user"

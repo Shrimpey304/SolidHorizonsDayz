@@ -24,6 +24,30 @@ class TkinterHandler:
             filemode='a'
         )
 
+    UsedLabelLoginError = 0
+    def loginScreen(self):
+
+        def loginValid():
+            get_input = entry.get()
+            if instApi.apiCheckTokenOnLogin(get_input) == True:
+                self.mainScreen()
+            else:
+                if TkinterHandler.UsedLabelLoginError < 1:
+                    LoginErrorLabel = tk.Label(logscreen, text='your passkey was incorrect, please restart the program'
+                                                               ' or empty the Credentials.Json to Restart the registration process', height=2)
+                    LoginErrorLabel.pack(pady=5)
+                    TkinterHandler.UsedLabelLoginError += 1
+
+        logscreen = tk.Tk()
+        logscreen.geometry('900x480')
+        LoginScreenLabel = tk.Label(logscreen, text='please provide the key that was given on entering the token', height=2)
+        LoginScreenLabel.pack(pady=5)
+        entry = tk.Entry(logscreen)
+        entry.pack(pady=5)
+        button = tk.Button(logscreen, text="Log in", command=loginValid)
+        button.pack(pady=5)
+        logscreen.mainloop()
+
 
     def mainScreen(self):
         self.Root = tk.Tk()
@@ -31,8 +55,9 @@ class TkinterHandler:
         self.Root.title('Dayz (Console) Manager')
         labelTitle = tk.Label(self.Root, text='Dayz (Console) Manager For Nitrado Hosted Servers', height=2)
         labelTitle.pack(pady=5)
+        WelcomeUserLabel = tk.Label(self.Root, text=f'welcome {instApi.apiFetchOwnerInfo()["user"]["username"]}')
+        WelcomeUserLabel.pack(padx=10, pady=10, anchor='w')
         self.Root.mainloop()
-
 
     def apiErrorStartupScreen(self):
         def cloudStatus():
