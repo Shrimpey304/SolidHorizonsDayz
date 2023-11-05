@@ -8,6 +8,7 @@ import Utils
 import pyperclip
 import webbrowser as wb
 from PIL import Image, ImageTk
+import json
 # from tkinter import scrolledtext, simpledialog
 
 
@@ -38,14 +39,21 @@ class TkinterHandler:
                     LoginErrorLabel.pack(pady=5)
                     TkinterHandler.UsedLabelLoginError += 1
 
+        def renewToken():
+            instTKH.invalidateToken()
+            logscreen.destroy()
+            self.openingBrowserToUrl()
+
         logscreen = tk.Tk()
         logscreen.geometry('900x480')
         LoginScreenLabel = tk.Label(logscreen, text='please provide the key that was given on entering the token', height=2)
         LoginScreenLabel.pack(pady=5)
         entry = tk.Entry(logscreen)
         entry.pack(pady=5)
-        button = tk.Button(logscreen, text="Log in", command=loginValid)
-        button.pack(pady=5)
+        LogInButton = tk.Button(logscreen, text="Log in", command=loginValid)
+        LogInButton.pack(pady=5)
+        LogInButton = tk.Button(logscreen, text="Renew the token (this will delete your current token off the system)", command=renewToken)
+        LogInButton.pack(pady=5)
         logscreen.mainloop()
 
 

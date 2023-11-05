@@ -42,6 +42,16 @@ class TokenHandler():
         log_file_path = os.path.join(current_dir, 'Content', 'Credentials', 'Credentials.json')
         with open(log_file_path, 'w') as f:
             json.dump(credentialObj, f)
+
+    def invalidateToken(self):
+        credentialObj = {
+                "encrypted" : False,
+                "token" : ""
+        }
+        current_dir = os.path.dirname(__file__)
+        log_file_path = os.path.join(current_dir, 'Content', 'Credentials', 'Credentials.json')
+        with open(log_file_path, 'w') as f:
+            json.dump(credentialObj, f)
         
         
 instance = TokenHandler()
