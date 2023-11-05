@@ -43,7 +43,7 @@ class Main:
 
         except Exception as e:
             log.info(e)
-            print(e)
+            print("error?", e)
 
 
 

@@ -45,7 +45,6 @@ class ApiHandler:
         apiTokenHeaders = {'Authorization': Utils.T}
         response = rq.get(apiTokenValidatorUrl, headers=apiTokenHeaders)
         decodedResponse = response.json()
-        print(Utils.T, decodedResponse)
         if decodedResponse['status'] == "success":
             return True
         else:
@@ -70,6 +69,5 @@ class ApiHandler:
             return decodedResponse['data']
         else:
             return "failed"
-
 
 instTKH = TKH.TokenHandler()

@@ -7,6 +7,7 @@ import TokenHandler as TKH
 import Utils
 import pyperclip
 import webbrowser as wb
+from PIL import Image, ImageTk
 # from tkinter import scrolledtext, simpledialog
 
 
@@ -34,11 +35,40 @@ class TkinterHandler:
 
 
     def apiErrorStartupScreen(self):
+        def cloudStatus():
+            if instApi.apiMaintenanceCheck()["cloud_backend"]:
+                return "cloud : maintenance\n"
+            else:
+                return "cloud : online\n"
+
+        def domainStatus():
+            if instApi.apiMaintenanceCheck()["domain_backend"]:
+                return "domain : maintenance\n"
+            else:
+                return "domain : online\n"
+
+        def dnsStatus():
+            if instApi.apiMaintenanceCheck()["dns_backend"]:
+                return "dns : maintenance\n"
+            else:
+                return "dns : online\n"
+
+        def pmacctStatus():
+            if instApi.apiMaintenanceCheck()["pmacct_backend"]:
+                return "pmacct : maintenance\n"
+            else:
+                return "pmacct : online\n"
         ErrorWindow = tk.Tk()
         ErrorWindow.geometry('900x480')
         ErrorWindow.title('Dayz (Console) Manager')
         labelTitle = tk.Label(ErrorWindow, text='Nitrado is currently unavailable:', height=2)
         labelTitle.pack(pady=5)
+        labelStatus = tk.Label(ErrorWindow, text=f'Status: \n'f'{cloudStatus()}{domainStatus()}{dnsStatus()}{pmacctStatus()}')
+        labelStatus.pack()
+        image = Image.open("Content/Images/ApiError.png")
+        photo = ImageTk.PhotoImage(image)
+        imageLabel = tk.Label(ErrorWindow, image=photo)
+        imageLabel.pack()
         ErrorWindow.mainloop()
 
 
