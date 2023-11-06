@@ -42,8 +42,6 @@ class Main:
             print("error?", e)
 
 
-
-
 StartProgram = Main()
 instApi = AH.ApiHandler()
 instTkint = TH.TkinterHandler()

@@ -8,7 +8,6 @@ import Utils
 import pyperclip
 import webbrowser as wb
 from PIL import Image, ImageTk
-import json
 # from tkinter import scrolledtext, simpledialog
 
 
@@ -44,6 +43,7 @@ class TkinterHandler:
             logscreen.destroy()
             self.openingBrowserToUrl()
 
+
         logscreen = tk.Tk()
         logscreen.geometry('900x480')
         LoginScreenLabel = tk.Label(logscreen, text='please provide the key that was given on entering the token', height=2)
@@ -58,6 +58,60 @@ class TkinterHandler:
 
 
     def mainScreen(self):
+        def testWindow():
+            ServicesList = ["---"]
+
+            def getServices(gs):
+                ServicesList.clear()
+                ServicesList.append("---")
+                print(ServicesList, gs)
+                if gs:
+                    ServicesList.append('All')
+                    print(ServicesList, gs)
+                for services in instApi.apiFetchAllOwnedServices()['services']:
+                    ServicesList.append(f'{services["details"]["name"]} - {services["id"]}')
+                print(ServicesList, gs)
+                if not gs and 'All' in ServicesList:
+                    ServicesList.remove('All')
+                    print(ServicesList, gs)
+                updateOptionMenu()
+
+            def isTicked():
+                checkbox_state = SelectAllCheckboxVar.get()
+                print(checkbox_state)
+                if checkbox_state:
+                    getServices(True)
+                else:
+                    getServices(False)
+
+            def updateOptionMenu():
+                menu = option_menu["menu"]
+                menu.delete(0, "end")
+                for service in ServicesList:
+                    menu.add_command(label=service, command=tk._setit(selected_option, service))
+
+            testWind = tk.Tk()
+            testWind.geometry('1000x280')
+            testWind.title('Test Window')
+
+            label = tk.Label(testWind, text="Select an option:")
+            label.grid(row=0, column=0, padx=10, pady=10)
+
+            # Create a variable to store the selected option
+            selected_option = tk.StringVar(testWind)
+            selected_option.set(ServicesList[0])  # Set the default option
+
+            SelectAllCheckboxVar = tk.BooleanVar(testWind)
+            SelectAllCheckbox = tk.Checkbutton(testWind, text="Allow 'all' services", variable=SelectAllCheckboxVar,
+                                               command=isTicked)
+            SelectAllCheckbox.grid(row=0, column=2, padx=10, pady=10)
+
+            option_menu = tk.OptionMenu(testWind, selected_option, *ServicesList)
+            option_menu.grid(row=0, column=1, padx=10, pady=10)
+
+            isTicked()  # Call isTicked to initially populate the options
+            testWind.mainloop()
+
         self.Root = tk.Tk()
         self.Root.geometry('1280x720')
         self.Root.title('Dayz (Console) Manager')
@@ -65,6 +119,8 @@ class TkinterHandler:
         labelTitle.pack(pady=5)
         WelcomeUserLabel = tk.Label(self.Root, text=f'welcome {instApi.apiFetchOwnerInfo()["user"]["username"]}')
         WelcomeUserLabel.pack(padx=10, pady=10, anchor='w')
+        TestButton = tk.Button(self.Root, text="Open Test Window", command=testWindow)
+        TestButton.pack(pady=5)
         self.Root.mainloop()
 
     def apiErrorStartupScreen(self):
