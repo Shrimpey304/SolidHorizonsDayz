@@ -30,15 +30,19 @@ class TkinterHandler:
         def loginValid():
             get_input = entry.get()
             if instApi.apiCheckTokenOnLogin(get_input) == True:
+                log.info("Token/key combination correct, heading to mainscreen")
+                logscreen.destroy()
                 self.mainScreen()
             else:
                 if TkinterHandler.UsedLabelLoginError < 1:
+                    log.info("Token/key combination incorrect")
                     LoginErrorLabel = tk.Label(logscreen, text='your passkey was incorrect, please restart the program'
                                                                ' or empty the Credentials.Json to Restart the registration process', height=2)
                     LoginErrorLabel.pack(pady=5)
                     TkinterHandler.UsedLabelLoginError += 1
 
         def renewToken():
+            log.info("invalidating token, going to register screen")
             instTKH.invalidateToken()
             logscreen.destroy()
             self.openingBrowserToUrl()
@@ -60,25 +64,36 @@ class TkinterHandler:
     def mainScreen(self):
         def testWindow():
             ServicesList = ["---"]
+            ServicesIDs = []
+            SelectedServices = []
 
             def getServices(gs):
                 ServicesList.clear()
+                ServicesIDs.clear()
+                SelectedServices.clear()
+                log.info("Cleared all lists")
+
                 ServicesList.append("---")
-                print(ServicesList, gs)
                 if gs:
+                    log.info("allowed 'All' services")
                     ServicesList.append('All')
-                    print(ServicesList, gs)
                 for services in instApi.apiFetchAllOwnedServices()['services']:
                     ServicesList.append(f'{services["details"]["name"]} - {services["id"]}')
-                print(ServicesList, gs)
-                if not gs and 'All' in ServicesList:
-                    ServicesList.remove('All')
-                    print(ServicesList, gs)
-                updateOptionMenu()
+                    ServicesIDs.append(services["id"])
+                try:
+                    if not gs and 'All' in ServicesList:
+                        log.info("Disallowed 'All' services")
+                        ServicesList.remove('All')
+                    else:
+                        pass
+                    setSelectedServiceID()
+                    log.info(f'Set selected server(s) to {SelectedServices}')
+                    updateOptionMenu()
+                except ValueError as e:
+                    log.info(f"currently expected error: {e}")
 
             def isTicked():
                 checkbox_state = SelectAllCheckboxVar.get()
-                print(checkbox_state)
                 if checkbox_state:
                     getServices(True)
                 else:
@@ -89,6 +104,18 @@ class TkinterHandler:
                 menu.delete(0, "end")
                 for service in ServicesList:
                     menu.add_command(label=service, command=tk._setit(selected_option, service))
+
+            def setSelectedServiceID():
+                selected = selected_option.get()
+                if selected == 'All':
+                    for s in ServicesIDs:
+                        if s not in SelectedServices:
+                            SelectedServices.append(s)
+                    # selectedServices.remove('All')
+                else:
+                    SelectedServices.append(selected)
+                log.info(f"Selected Services:{SelectedServices}")
+
 
             testWind = tk.Tk()
             testWind.geometry('1000x280')
@@ -147,6 +174,9 @@ class TkinterHandler:
                 return "pmacct : maintenance\n"
             else:
                 return "pmacct : online\n"
+
+        log.info(f"unable to start program: \n\t\t\t\t{cloudStatus()}\n\t\t\t\t{domainStatus()}\n\t\t\t\t{dnsStatus()}\n\t\t\t\t{pmacctStatus()}")
+
         ErrorWindow = tk.Tk()
         ErrorWindow.geometry('900x480')
         ErrorWindow.title('Dayz (Console) Manager')
@@ -166,10 +196,12 @@ class TkinterHandler:
         Used = False
 
         def browserOpenNitradoTokenPage():
+            log.info("opening browser to token page")
             url = "https://server.nitrado.net/eng/developer/tokens"
             wb.open_new(url)
 
         def get_input_and_set_token():
+            log.info("getting and encrypting token")
             get_input = entry.get()
             global Used
             Used = True
@@ -198,7 +230,7 @@ class TkinterHandler:
         self.showKey()
 
     def showKey(self):
-
+        log.info("Showing key to user")
         def copyKey():
             pyperclip.copy(Utils.K)
 
@@ -210,6 +242,7 @@ class TkinterHandler:
         ShowKey.geometry('400x280')
 
         if instApi.apiCheckTokenValidity() == True:
+            log.info("Token is Valid")
             LabelTitle = tk.Label(ShowKey, text='This is your login key, SAVE THIS CAREFULLY:', height=2)
             LabelTitle.pack(pady=5)
             LabelKey = tk.Label(ShowKey, text=f'{Utils.K}')
@@ -231,6 +264,7 @@ class TkinterHandler:
             TryAgainButton.pack(pady=5)
 
     def startProgram(self, a):
+        log.info("Starting program")
         if a == True:
             self.mainScreen()
         else:

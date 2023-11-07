@@ -22,6 +22,7 @@ class ApiHandler:
         )
 
     def apiHealthCheck(self):    #checks if the nitrado services are working
+        log.info("used apiHealthCheck()")
         ApiHealthCheckUrl = "https://api.nitrado.net/ping"
         response = rq.get(ApiHealthCheckUrl)
         decodedResponse = response.json()
@@ -31,6 +32,7 @@ class ApiHandler:
             return False
         
     def apiMaintenanceCheck(self):
+        log.info("used apiMaintenanceCheck()")
         apiHealthCheckUrl = "https://api.nitrado.net/maintenance"
         response = rq.get(apiHealthCheckUrl)
         decodedResponse = response.json()
@@ -41,6 +43,7 @@ class ApiHandler:
         
     
     def apiCheckTokenValidity(self):
+        log.info("used apiCheckTokenValidity()")
         apiTokenValidatorUrl = "https://oauth.nitrado.net/token"
         apiTokenHeaders = {'Authorization': Utils.T}
         response = rq.get(apiTokenValidatorUrl, headers=apiTokenHeaders)
@@ -51,6 +54,7 @@ class ApiHandler:
             return False
 
     def apiCheckTokenOnLogin(self, key):
+        log.info("used apiCheckTokenOnLogin()")
         try:
             apiTokenValidatorUrl = "https://oauth.nitrado.net/token"
             instTKH.tokenDecrypt(key)
@@ -66,6 +70,7 @@ class ApiHandler:
 
         
     def apiFetchOwnerInfo(self):
+        log.info("used apiFetchOwnerInfo")
         apiFetchOwnerInfoUrl = "https://api.nitrado.net/user"
         apiTokenHeaders = {'Authorization': Utils.T}
         response = rq.get(apiFetchOwnerInfoUrl, headers=apiTokenHeaders)
@@ -76,6 +81,7 @@ class ApiHandler:
             return "failed"
         
     def apiFetchAllOwnedServices(self):
+        log.info("used apiFetchAllOwnedServices")
         apiFetchOwnedServicesUrl = "https://api.nitrado.net/services"
         apiTokenHeaders = {'Authorization': Utils.T}
         response = rq.get(apiFetchOwnedServicesUrl, headers=apiTokenHeaders)

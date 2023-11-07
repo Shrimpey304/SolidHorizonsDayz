@@ -28,18 +28,21 @@ class Main:
                     CredJSON = json.load(json_file)
 
                 if CredJSON['token'] is None or CredJSON['token'] == "":
+                    log.info("no token found, redirecting to set a token")
                     instTkint.openingBrowserToUrl()
                 else:
+                    log.info("Key accepted, logging in user")
                     instTkint.loginScreen()
 
             elif instApi.apiHealthCheck() != "failed":
+                log.info("api healthcheck failed, unable to start program")
                 instTkint.startProgram(False)
             else:
+                log.info("api healthcheck failed, unable to start program")
                 instTkint.startProgram(False)
 
         except Exception as e:
-            log.info(e)
-            print("error?", e)
+            log.info(f"error?:{e}")
 
 
 StartProgram = Main()
