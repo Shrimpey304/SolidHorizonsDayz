@@ -62,92 +62,85 @@ class TkinterHandler:
 
 
     def mainScreen(self):
-        def testWindow():
-            ServicesList = ["---"]
-            ServicesIDs = []
-            SelectedServices = []
+        ServicesList = ["---"]
+        ServicesIDs = []
+        SelectedServices = []
 
-            def getServices(gs):
-                ServicesList.clear()
-                ServicesIDs.clear()
-                SelectedServices.clear()
-                log.info("Cleared all lists")
+        def getServices(gs):
+            ServicesList.clear()
+            ServicesIDs.clear()
+            SelectedServices.clear()
+            log.info("Cleared all lists")
 
-                ServicesList.append("---")
-                if gs:
-                    log.info("allowed 'All' services")
-                    ServicesList.append('All')
-                for services in instApi.apiFetchAllOwnedServices()['services']:
-                    ServicesList.append(f'{services["details"]["name"]} - {services["id"]}')
-                    ServicesIDs.append(services["id"])
-                try:
-                    if not gs and 'All' in ServicesList:
-                        log.info("Disallowed 'All' services")
-                        ServicesList.remove('All')
-                    else:
-                        pass
-                    setSelectedServiceID()
-                    log.info(f'Set selected server(s) to {SelectedServices}')
-                    updateOptionMenu()
-                except ValueError as e:
-                    log.info(f"currently expected error: {e}")
-
-            def isTicked():
-                checkbox_state = SelectAllCheckboxVar.get()
-                if checkbox_state:
-                    getServices(True)
+            ServicesList.append("---")
+            if gs:
+                log.info("allowed 'All' services")
+                ServicesList.append('All')
+            for services in instApi.apiFetchAllOwnedServices()['services']:
+                ServicesList.append(f'{services["details"]["name"]} - {services["id"]}')
+                ServicesIDs.append(services["id"])
+            try:
+                if not gs and 'All' in ServicesList:
+                    log.info("Disallowed 'All' services")
+                    ServicesList.remove('All')
                 else:
-                    getServices(False)
+                    pass
+                setSelectedServiceID()
+                log.info(f'Set selected server(s) to {SelectedServices}')
+                updateOptionMenu()
+            except ValueError as e:
+                log.info(f"currently expected error: {e}")
 
-            def updateOptionMenu():
-                menu = option_menu["menu"]
-                menu.delete(0, "end")
-                for service in ServicesList:
-                    menu.add_command(label=service, command=tk._setit(selected_option, service))
+        def isTicked():
+            checkbox_state = SelectAllCheckboxVar.get()
+            if checkbox_state:
+                getServices(True)
+            else:
+                getServices(False)
 
-            def setSelectedServiceID():
-                selected = selected_option.get()
-                if selected == 'All':
-                    for s in ServicesIDs:
-                        if s not in SelectedServices:
-                            SelectedServices.append(s)
-                    # selectedServices.remove('All')
-                else:
-                    SelectedServices.append(selected)
-                log.info(f"Selected Services:{SelectedServices}")
+        def updateOptionMenu():
+            menu = option_menu["menu"]
+            menu.delete(0, "end")
+            for service in ServicesList:
+                menu.add_command(label=service, command=tk._setit(selected_option, service))
 
-
-            testWind = tk.Tk()
-            testWind.geometry('1000x280')
-            testWind.title('Test Window')
-
-            label = tk.Label(testWind, text="Select an option:")
-            label.grid(row=0, column=0, padx=10, pady=10)
-
-            # Create a variable to store the selected option
-            selected_option = tk.StringVar(testWind)
-            selected_option.set(ServicesList[0])  # Set the default option
-
-            SelectAllCheckboxVar = tk.BooleanVar(testWind)
-            SelectAllCheckbox = tk.Checkbutton(testWind, text="Allow 'all' services", variable=SelectAllCheckboxVar,
-                                               command=isTicked)
-            SelectAllCheckbox.grid(row=0, column=2, padx=10, pady=10)
-
-            option_menu = tk.OptionMenu(testWind, selected_option, *ServicesList)
-            option_menu.grid(row=0, column=1, padx=10, pady=10)
-
-            isTicked()  # Call isTicked to initially populate the options
-            testWind.mainloop()
+        def setSelectedServiceID():
+            selected = selected_option.get()
+            if selected == 'All':
+                for s in ServicesIDs:
+                    if s not in SelectedServices:
+                        SelectedServices.append(s)
+                # selectedServices.remove('All')
+            else:
+                SelectedServices.append(selected)
+            log.info(f"Selected Services:{SelectedServices}")
 
         self.Root = tk.Tk()
         self.Root.geometry('1280x720')
         self.Root.title('Dayz (Console) Manager')
         labelTitle = tk.Label(self.Root, text='Dayz (Console) Manager For Nitrado Hosted Servers', height=2)
-        labelTitle.pack(pady=5)
+        labelTitle.grid(row=0, column=5, padx=10, pady=10)
+
         WelcomeUserLabel = tk.Label(self.Root, text=f'welcome {instApi.apiFetchOwnerInfo()["user"]["username"]}')
-        WelcomeUserLabel.pack(padx=10, pady=10, anchor='w')
-        TestButton = tk.Button(self.Root, text="Open Test Window", command=testWindow)
-        TestButton.pack(pady=5)
+        WelcomeUserLabel.grid(row=1, column=0, padx=10, pady=10)
+
+        label = tk.Label(self.Root, text="Select an option:")
+        label.grid(row=2, column=0, padx=10, pady=10)
+
+        # Create a variable to store the selected option
+        selected_option = tk.StringVar(self.Root)
+        selected_option.set(ServicesList[0])  # Set the default option
+
+        SelectAllCheckboxVar = tk.BooleanVar(self.Root)
+        SelectAllCheckbox = tk.Checkbutton(self.Root, text="Allow 'all' services", variable=SelectAllCheckboxVar,
+                                           command=isTicked)
+        SelectAllCheckbox.grid(row=2, column=2, padx=10, pady=10)
+
+        option_menu = tk.OptionMenu(self.Root, selected_option, *ServicesList)
+        option_menu.grid(row=2, column=1, padx=10, pady=10)
+
+        isTicked()  # Call isTicked to initially populate the options
+
         self.Root.mainloop()
 
     def apiErrorStartupScreen(self):
