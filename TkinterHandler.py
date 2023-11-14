@@ -8,6 +8,7 @@ import Utils
 import pyperclip
 import webbrowser as wb
 from PIL import Image, ImageTk
+import re
 # from tkinter import scrolledtext, simpledialog
 
 
@@ -42,7 +43,7 @@ class TkinterHandler:
                     TkinterHandler.UsedLabelLoginError += 1
 
         def renewToken():
-            log.info("invalidating token, going to register screen")
+            log.info("deleting token, going to register screen")
             instTKH.invalidateToken()
             logscreen.destroy()
             self.openingBrowserToUrl()
@@ -65,12 +66,12 @@ class TkinterHandler:
         ServicesList = ["---"]
         ServicesIDs = []
         SelectedServices = []
+        option_menu_ref = []
 
         def getServices(gs):
             ServicesList.clear()
             ServicesIDs.clear()
-            SelectedServices.clear()
-            log.info("Cleared all lists")
+            log.info("Cleared ServicesList and ServicesIDs")
 
             ServicesList.append("---")
             if gs:
@@ -99,27 +100,46 @@ class TkinterHandler:
                 getServices(False)
 
         def updateOptionMenu():
-            menu = option_menu["menu"]
-            menu.delete(0, "end")
-            for service in ServicesList:
-                menu.add_command(label=service, command=tk._setit(selected_option, service))
+            if option_menu_ref:  # Check if the list has elements
+                menu = option_menu_ref[0]["menu"]  # Access OptionMenu through the mutable reference
+                menu.delete(0, "end")
+                for service in ServicesList:
+                    menu.add_command(label=service, command=lambda s=service: selected_option.set(s))
+
+                selected_service_label = selected_option.get()
+                print(f"Selected: {selected_service_label},ServicesList: {ServicesList}, ServicesIDs: {ServicesIDs}")
+            else:
+                print("OptionMenu reference not found.")
 
         def setSelectedServiceID():
             selected = selected_option.get()
+            SelectedServices.clear()  # Clear the list before updating
+
             if selected == 'All':
-                for s in ServicesIDs:
-                    if s not in SelectedServices:
-                        SelectedServices.append(s)
-                # selectedServices.remove('All')
+                SelectedServices.extend(ServicesIDs)  # Add all service IDs
             else:
-                SelectedServices.append(selected)
-            log.info(f"Selected Services:{SelectedServices}")
+                selected_service_id = selected.split(" - ")[-1]  # Extract the service ID from the selected string
+                SelectedServices.append(selected_service_id)
+
+            log.info(f"Selected Services: {SelectedServices}")
+            updateOptionMenu()
+            print(f"Selected: {selected}, ServicesIDs: {ServicesIDs}, SelectedServices: {SelectedServices}")
+
+        def on_option_change(*args):
+            updateOptionMenu()
 
         self.Root = tk.Tk()
         self.Root.geometry('1280x720')
         self.Root.title('Dayz (Console) Manager')
-        labelTitle = tk.Label(self.Root, text='Dayz (Console) Manager For Nitrado Hosted Servers', height=2)
-        labelTitle.grid(row=0, column=5, padx=10, pady=10)
+
+        selected_option = tk.StringVar(self.Root)
+        selected_option.trace('w', on_option_change)
+        selected_option.set(ServicesList[0])
+
+        option_menu = tk.OptionMenu(self.Root, selected_option, *ServicesList)
+        option_menu.grid(row=2, column=1, padx=10, pady=10)
+
+        option_menu_ref.append(option_menu)
 
         WelcomeUserLabel = tk.Label(self.Root, text=f'welcome {instApi.apiFetchOwnerInfo()["user"]["username"]}')
         WelcomeUserLabel.grid(row=1, column=0, padx=10, pady=10)
@@ -127,17 +147,10 @@ class TkinterHandler:
         label = tk.Label(self.Root, text="Select an option:")
         label.grid(row=2, column=0, padx=10, pady=10)
 
-        # Create a variable to store the selected option
-        selected_option = tk.StringVar(self.Root)
-        selected_option.set(ServicesList[0])  # Set the default option
-
         SelectAllCheckboxVar = tk.BooleanVar(self.Root)
         SelectAllCheckbox = tk.Checkbutton(self.Root, text="Allow 'all' services", variable=SelectAllCheckboxVar,
                                            command=isTicked)
         SelectAllCheckbox.grid(row=2, column=2, padx=10, pady=10)
-
-        option_menu = tk.OptionMenu(self.Root, selected_option, *ServicesList)
-        option_menu.grid(row=2, column=1, padx=10, pady=10)
 
         isTicked()  # Call isTicked to initially populate the options
 
