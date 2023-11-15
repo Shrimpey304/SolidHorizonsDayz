@@ -68,6 +68,16 @@ class TkinterHandler:
         SelectedServices = []
         option_menu_ref = []
 
+        def actionApi(apiCall):
+            if len(SelectedServices) > 0:
+                for sID in SelectedServices:
+                    if apiCall == "Restart":
+                        instApi.apiRestartService(sID)
+                    elif apiCall == "Stop":
+                        instApi.apiStopService(sID)
+            else:
+                print("please select a service")
+
         def getServices(gs):
             ServicesList.clear()
             ServicesIDs.clear()
@@ -107,7 +117,7 @@ class TkinterHandler:
                     menu.add_command(label=service, command=lambda s=service: selected_option.set(s))
 
                 selected_service_label = selected_option.get()
-                print(f"Selected: {selected_service_label},ServicesList: {ServicesList}, ServicesIDs: {ServicesIDs}")
+                print(f"Selected: {SelectedServices}")
             else:
                 print("OptionMenu reference not found.")
 
@@ -123,10 +133,10 @@ class TkinterHandler:
 
             log.info(f"Selected Services: {SelectedServices}")
             updateOptionMenu()
-            print(f"Selected: {selected}, ServicesIDs: {ServicesIDs}, SelectedServices: {SelectedServices}")
+            print(f"Selected: {SelectedServices}")
 
         def on_option_change(*args):
-            updateOptionMenu()
+            setSelectedServiceID()
 
         self.Root = tk.Tk()
         self.Root.geometry('1280x720')
@@ -153,6 +163,12 @@ class TkinterHandler:
         SelectAllCheckbox.grid(row=2, column=2, padx=10, pady=10)
 
         isTicked()  # Call isTicked to initially populate the options
+
+        restartService = tk.Button(self.Root, text="Restart Service", command=lambda: actionApi("Restart"))
+        restartService.grid(row=3, column=1, padx=10, pady=10)
+
+        stopService = tk.Button(self.Root, text="Stop Service", command=lambda: actionApi("Stop"))
+        stopService.grid(row=3, column=2, padx=10, pady=10)
 
         self.Root.mainloop()
 

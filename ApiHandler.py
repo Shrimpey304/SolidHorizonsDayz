@@ -91,4 +91,32 @@ class ApiHandler:
         else:
             return "failed"
 
+    def apiRestartService(self, serviceID):
+        response = None
+        try:
+            log.info("used apiRestartService")
+            apiFetchRestartUrl = f"https://api.nitrado.net/services/{serviceID}/gameservers/restart"
+            apiTokenHeaders = {'Authorization': Utils.T}
+            response = rq.post(apiFetchRestartUrl, headers=apiTokenHeaders)
+            decodedResponse = response.json()
+            if decodedResponse['status'] == "success":
+                return True
+            else:
+                return False
+        except json.JSONDecodeError as json_error:
+            log.info(f"JSON Decode Error: {json_error}")
+            log.info(f"Response content: {response.content}")
+
+
+    def apiStopService(self, serviceID):
+        log.info("used apiRestartService")
+        apiFetchStopUrl = f"https://api.nitrado.net/services/{serviceID}/gameservers/stop"
+        apiTokenHeaders = {'Authorization': Utils.T}
+        response = rq.post(apiFetchStopUrl, headers=apiTokenHeaders)
+        decodedResponse = response.json()
+        if decodedResponse['status'] == "success":
+            return True
+        else:
+            return False
+
 instTKH = TKH.TokenHandler()
