@@ -15,7 +15,7 @@ class testxmledit:
                 # Find the <active> tag and set its text to '0'
                 active_tag = event.find('active')
                 if active_tag is not None:
-                    active_tag.text = '0'
+                    active_tag.text = '1'
 
         # Save the modified XML
         tree.write('Content/xmlfiles/events.xml')

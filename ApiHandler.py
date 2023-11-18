@@ -53,6 +53,7 @@ class ApiHandler:
         else:
             return False
 
+
     def apiCheckTokenOnLogin(self, key):
         log.info("used apiCheckTokenOnLogin()")
         try:
@@ -79,7 +80,8 @@ class ApiHandler:
             return decodedResponse['data']
         else:
             return "failed"
-        
+
+
     def apiFetchAllOwnedServices(self):
         log.info("used apiFetchAllOwnedServices")
         apiFetchOwnedServicesUrl = "https://api.nitrado.net/services"
@@ -90,6 +92,7 @@ class ApiHandler:
             return decodedResponse['data']
         else:
             return "failed"
+
 
     def apiRestartService(self, serviceID):
         response = None
@@ -119,11 +122,52 @@ class ApiHandler:
         else:
             return False
 
+
     def apiRemoveFile(self, serviceID, filepath):
         log.info("used apiRemoveFile")
-        apiFetchStopUrl = f"https://api.nitrado.net/services/{serviceID}/gameservers/file_server/delete?path={filepath}"
+        apiFetchRemoveFileUrl = f"https://api.nitrado.net/services/{serviceID}/gameservers/file_server/delete"
+        apiTokenHeaders = {'path': filepath, 'Authorization': Utils.T}
+        try:
+            response = rq.delete(apiFetchRemoveFileUrl, params=apiTokenHeaders)
+            response.raise_for_status()  # Raise an exception for 4xx/5xx status codes
+            decodedResponse = response.json()
+            if decodedResponse.get('status') == "success":
+                return True
+            else:
+                return False
+        except rq.exceptions.RequestException as e:
+            log.error(f"Request failed: {e}")
+            return False
+
+    def apiAddFile(self, serviceID, filepath, fileToAdd):
+        log.info("used apiAddFile")
+        apiFetchAddFileUrl = f"https://api.nitrado.net/services/{serviceID}/gameservers/file_server/upload"
+        # Prepare the file to be uploaded
+        files = {'file': open(fileToAdd, 'rb')}  # Assuming 'fileToAdd' contains the path to the file
+        # Include the access token as a GET parameter
+        apiToken = Utils.T
+        queryParams = {'path': filepath, 'access_token': apiToken}
+        try:
+            response = rq.post(apiFetchAddFileUrl, headers={}, params=queryParams, files=files)
+            response.raise_for_status()  # Raise an exception for 4xx/5xx status codes
+            decodedResponse = response.json()
+            if decodedResponse.get('status') == "success":
+                return True
+            else:
+                return False
+        except rq.exceptions.RequestException as e:
+            log.error(f"Request failed: {e}")
+            return False
+
+    def apiGetServiceStatus(self, serviceID):
+        log.info("checking service status")
+        apiFetchStatusUrl =f"https://api.nitrado.net/services/{serviceID}/gameservers"
         apiTokenHeaders = {'Authorization': Utils.T}
-        response = rq.post(apiFetchStopUrl, headers=apiTokenHeaders)
+        response = rq.get(apiFetchStatusUrl, headers=apiTokenHeaders)
         decodedResponse = response.json()
+        if decodedResponse['data']['gameserver']['status'] == "started":
+            return True
+        else:
+            return False
 
 instTKH = TKH.TokenHandler()

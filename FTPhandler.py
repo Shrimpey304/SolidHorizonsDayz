@@ -3,6 +3,7 @@ import datetime as dt
 import os
 import xml.etree.ElementTree as ET
 import ApiHandler
+import time
 
 
 
@@ -22,7 +23,7 @@ class FTPhandler:
     def FtpVehicleReset(self, selectedService):
         path = "dayzstandalone%2Fmpmissions%2FdayzOffline.chernarusplus%2Fcustom%2Fevents.xml"
 
-        def editVehiclesReset0(self):
+        def editVehiclesReset0():
             # Parse the XML data
             tree = ET.parse('Content/xmlfiles/events.xml')
             root = tree.getroot()
@@ -37,7 +38,7 @@ class FTPhandler:
             # Save the modified XML
             tree.write('Content/xmlfiles/events.xml')
 
-        def editVehiclesReset1(self):
+        def editVehiclesReset1():
             # Parse the XML data
             tree = ET.parse('Content/xmlfiles/events.xml')
             root = tree.getroot()
@@ -45,7 +46,7 @@ class FTPhandler:
             for event in root.findall("./event"):
                 name = event.get('name')
                 if 'Vehicle' in name:
-                    # Find the <active> tag and set its text to '0'
+                    # Find the <active> tag and set its text to '1'
                     active_tag = event.find('active')
                     if active_tag is not None:
                         active_tag.text = '1'
@@ -53,7 +54,19 @@ class FTPhandler:
             tree.write('Content/xmlfiles/events.xml')
 
         for Service in selectedService:
-            instAPI.apiRemoveFile(Service, "Content/xmlfiles/events.xml")
+            editVehiclesReset0()
+            if instAPI.apiRemoveFile(Service, "dayzstandalone\mpmissions\dayzstandaloneTestServer\mpmissions\dayzOffline.chernarusplus\custom\events.xml"):
+                instAPI.apiRestartService(Service)
+
+            while not instAPI.apiGetServiceStatus(Service):
+                log.info("Checking service status")
+                time.sleep(5)
+
+            editVehiclesReset1()
+            if instAPI.apiAddFile(Service, "dayzstandalone\mpmissions\dayzstandaloneTestServer\mpmissions\dayzOffline.chernarusplus\custom", "Content/xmlfiles/events.xml"):
+                instAPI.apiRestartService(Service)
+
+
 
 
 instAPI = ApiHandler.ApiHandler()
