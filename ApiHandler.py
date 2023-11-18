@@ -119,4 +119,11 @@ class ApiHandler:
         else:
             return False
 
+    def apiRemoveFile(self, serviceID, filepath):
+        log.info("used apiRemoveFile")
+        apiFetchStopUrl = f"https://api.nitrado.net/services/{serviceID}/gameservers/file_server/delete?path={filepath}"
+        apiTokenHeaders = {'Authorization': Utils.T}
+        response = rq.post(apiFetchStopUrl, headers=apiTokenHeaders)
+        decodedResponse = response.json()
+
 instTKH = TKH.TokenHandler()

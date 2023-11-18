@@ -8,7 +8,9 @@ import Utils
 import pyperclip
 import webbrowser as wb
 from PIL import Image, ImageTk
-import re
+from tkinter import filedialog
+import FTPhandler as FTPH
+#import re
 # from tkinter import scrolledtext, simpledialog
 
 
@@ -67,6 +69,10 @@ class TkinterHandler:
         ServicesIDs = []
         SelectedServices = []
         option_menu_ref = []
+
+        def selectFile():
+            file_path = filedialog.askopenfilename()
+            print("Selected file:", file_path)
 
         def actionApi(apiCall):
             if len(SelectedServices) > 0:
@@ -169,6 +175,9 @@ class TkinterHandler:
 
         stopService = tk.Button(self.Root, text="Stop Service", command=lambda: actionApi("Stop"))
         stopService.grid(row=3, column=2, padx=10, pady=10)
+
+        FtpResetVehicles = tk.Button(self.Root, text="Reset Vehicles", command=instFTP.FtpVehicleReset(SelectedServices))
+        FtpResetVehicles.grid(row=4, column=1, padx=10, pady=10)
 
         self.Root.mainloop()
 
@@ -295,4 +304,4 @@ class TkinterHandler:
 
 instApi = AH.ApiHandler()
 instTKH = TKH.TokenHandler()
-
+instFTP = FTPH.FTPhandler()
